@@ -1,0 +1,16 @@
+{
+  "name": "Statement to Excel",
+  "short_name": "StatementXL",
+  "description": "Convert bank statement PDFs to Excel privately in your browser.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f7f6",
+  "theme_color": "#0b6b4f",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}
