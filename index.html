@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank Statement PDF to Excel Converter – Free and Private | PDF2Ledger</title>
+<meta name="description" content="Convert bank statement PDF to Excel or CSV for free. Works in your browser, so your statement is never uploaded. Supports password-protected PDFs and multiple files.">
+<!-- Google Search Console: paste your <meta name="google-site-verification" content="..."> tag on the next line -->
+<meta name="google-site-verification" content="AcZkX9wt10qXx4vX5wFfJ2-UlLucaB2IXb_LqkihG30">
+<link rel="canonical" href="https://pdf2ledger.vercel.app/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b6b4f">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PDF2Ledger">
+<meta property="og:title" content="Bank Statement PDF to Excel Converter – Free and Private">
+<meta property="og:description" content="Turn bank statement PDFs into Excel or CSV. Runs in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://pdf2ledger.vercel.app/">
+<meta property="og:image" content="https://pdf2ledger.vercel.app/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bank Statement PDF to Excel Converter – Free and Private">
+<meta name="twitter:description" content="Turn bank statement PDFs into Excel or CSV. Runs in your browser, nothing is uploaded.">
+<meta name="twitter:image" content="https://pdf2ledger.vercel.app/assets/og-image.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "PDF2Ledger", "url": "https://pdf2ledger.vercel.app/", "description": "Free online converter that turns bank statement PDFs into Excel or CSV files, privately in your browser.", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "image": "https://pdf2ledger.vercel.app/assets/og-image.png"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I convert a bank statement PDF to Excel?", "acceptedAnswer": {"@type": "Answer", "text": "Drop your PDF statement into the page, check the detected rows, then click Download Excel or Download CSV."}}, {"@type": "Question", "name": "Is it safe to convert my bank statement here?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The conversion runs entirely in your browser. Your PDF is never uploaded to a server."}}, {"@type": "Question", "name": "Can it convert password-protected bank statement PDFs?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Enter the PDF password in the password box, then add the file."}}, {"@type": "Question", "name": "Does it work with scanned statements?", "acceptedAnswer": {"@type": "Answer", "text": "It works with text-based PDFs downloaded from your bank. Scanned image PDFs need OCR first."}}, {"@type": "Question", "name": "Is it free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, it is free to use with no sign-up."}}]}]}</script>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="32" height="32"><span>PDF2Ledger</span></a>
+  <a class="bar-link" href="#support">Support this project</a>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Bank statement PDF to Excel. Nothing gets uploaded.</h1>
+    <p>Everything happens in your browser. Drop a statement, check the rows, and download a clean spreadsheet.</p>
+    <ul class="points"><li>Free to use</li><li>Private by design</li><li>Excel and CSV</li></ul>
+  </section>
+
+  <section class="card tool">
+    <div id="drop" class="drop" tabindex="0" role="button" aria-label="Choose PDF statements">
+      <input id="file" type="file" accept="application/pdf" multiple hidden>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+      <p class="drop-title">Drop your PDF statements here</p>
+      <p class="drop-sub">or click to browse. You can add several files.</p>
+    </div>
+    <div class="opts">
+      <label>PDF password
+        <input id="pwd" type="password" autocomplete="off" placeholder="Only if the PDF is protected">
+      </label>
+      <label>Date order
+        <select id="dateOrder"><option value="dmy">Day / Month / Year</option><option value="mdy">Month / Day / Year</option></select>
+      </label>
+    </div>
+    <p id="status" class="status" role="status"></p>
+  </section>
+
+  <section id="result" class="card" hidden>
+    <div class="result-head">
+      <div class="stats">
+        <div><b id="sCount">0</b><span>rows</span></div>
+        <div><b id="sDebit">0</b><span>total debits</span></div>
+        <div><b id="sCredit">0</b><span>total credits</span></div>
+      </div>
+      <div class="actions">
+        <button id="addRow">Add row</button>
+        <button id="dlCsv">Download CSV</button>
+        <button id="dlXlsx" class="primary">Download Excel</button>
+      </div>
+    </div>
+    <p class="hint">Click any cell to edit it. Use × to remove a row.</p>
+    <div class="table-wrap">
+      <table id="tbl">
+        <thead><tr><th>Date</th><th>Description</th><th class="n">Debit</th><th class="n">Credit</th><th class="n">Balance</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card info">
+    <h2>How to convert a bank statement PDF to Excel</h2>
+    <ol>
+      <li>Download your statement as a PDF from your bank's website or app.</li>
+      <li>Drop it into the box above. Enter the password if the PDF is protected.</li>
+      <li>Check the rows in the preview and fix anything that looks off.</li>
+      <li>Download the Excel (.xlsx) or CSV file.</li>
+    </ol>
+  </section>
+
+  <section class="card faq">
+    <h2>Questions</h2>
+    <details><summary>Is it safe to convert my bank statement here?</summary><p>Yes. The conversion runs in your browser. Your PDF is never uploaded to a server, and nothing is stored.</p></details>
+    <details><summary>Can it open password-protected PDFs?</summary><p>Yes. Type the PDF password in the password box, then add the file.</p></details>
+    <details><summary>Does it work with scanned statements?</summary><p>It works with text-based PDFs downloaded from your bank. Scanned image PDFs need OCR first.</p></details>
+    <details><summary>Which banks does it support?</summary><p>It reads most text-based statements that list the date, description, debit, credit and balance. Layouts vary by bank, so check the preview before downloading.</p></details>
+    <details><summary>Is it free?</summary><p>Yes, with no sign-up. If it helps you, you can support it with a small donation.</p></details>
+  </section>
+
+  <section id="support" class="card support">
+    <div class="support-text">
+      <h2>This tool is free, and it will stay free.</h2>
+      <p>If it saved you time or added value to your day, you can chip in through UPI. If it didn't, no problem at all.</p>
+      <p>You can also help by sharing it with someone who works with bank statements.</p>
+      <button id="share" class="primary">Share this tool</button>
+    </div>
+    <div class="upi-box">
+      <span class="upi-label">Donate via UPI</span>
+      <b id="upiNum" class="upi-num">9301708816</b>
+      <button id="copyUpi">Copy number</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Works with text-based PDFs. Scanned images need OCR first. Always check the output against your original statement.</p>
+  <p>Made by <a href="https://github.com/your-username" rel="noopener">Your Name</a></p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="parser.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
